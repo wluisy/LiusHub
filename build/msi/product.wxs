@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  LiusHub - WiX 3.14 MSI 安装工程（自定义安装目录 + 极简向导）
+  用法：
+    heat.exe  dir  dist/win-unpacked  ... -> files.wxs  （自动收集应用文件）
+    candle.exe product.wxs files.wxs
+    light.exe  -ext WixUIExtension product.wixobj files.wixobj -o LiusHub.msi
+-->
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product
+    Id="*"
+    Name="LiusHub"
+    Language="1033"
+    Version="0.1.0"
+    Manufacturer="LiusHub Team"
+    UpgradeCode="B4A7E2C1-9D3F-4E8B-8A5C-6F2D1E0A3B9C">
+
+    <Package
+      InstallerVersion="500"
+      InstallScope="perUser"
+      Compressed="yes"
+      Description="LiusHub - One-stop DevOps Workbench"
+      Manufacturer="LiusHub Team" />
+
+    <!-- 升级处理：允许覆盖旧版本 -->
+    <MajorUpgrade
+      DowngradeErrorMessage="A newer version of LiusHub is already installed." />
+
+    <MediaTemplate EmbedCab="yes" />
+
+    <!-- 目录结构：默认装到用户目录，可自定义 -->
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="LocalAppDataFolder">
+        <Directory Id="INSTALLFOLDER" Name="LiusHub" />
+      </Directory>
+      <Directory Id="ProgramMenuFolder" />
+      <Directory Id="DesktopFolder" />
+    </Directory>
+
+    <!-- 功能特性：应用文件 + 两个快捷方式 -->
+    <Feature Id="MainFeature" Title="LiusHub" Level="1">
+      <ComponentGroupRef Id="AppFiles" />
+      <ComponentRef Id="StartMenuShortcuts" />
+      <ComponentRef Id="DesktopShortcut" />
+    </Feature>
+
+    <!-- ============ 极简向导（WixUI_InstallDir：欢迎/许可/选目录/确认/进度/完成） ============ -->
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+    <UIRef Id="WixUI_InstallDir" />
+    <WixVariable Id="WixUILicenseRtf" Value="build\msi\license.rtf" />
+
+    <!-- ============ 开始菜单快捷方式 ============ -->
+    <DirectoryRef Id="INSTALLFOLDER">
+      <Component Id="StartMenuShortcuts" Guid="C5D8F3E2-1B4A-4C6D-9E7F-8A2B3C4D5E6F">
+        <Shortcut
+          Id="StartMenuShortcut"
+          Directory="ProgramMenuFolder"
+          Name="LiusHub"
+          Target="[#LiusHub.exe]"
+          WorkingDirectory="INSTALLFOLDER" />
+        <Shortcut
+          Id="StartMenuUninstallShortcut"
+          Directory="ProgramMenuFolder"
+          Name="Uninstall LiusHub"
+          Target="[SystemFolder]msiexec.exe"
+          Arguments="/x [ProductCode]" />
+        <RemoveFolder Id="RemoveProgramMenuDir" Directory="ProgramMenuFolder" On="uninstall" />
+        <RegistryValue Root="HKCU" Key="Software\LiusHub" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+
+    <!-- ============ 桌面快捷方式 ============ -->
+    <DirectoryRef Id="DesktopFolder">
+      <Component Id="DesktopShortcut" Guid="D6E9A4F3-2C5B-4D7E-AF81-9B3C4D5E6F70">
+        <Shortcut
+          Id="DesktopShortcut"
+          Directory="DesktopFolder"
+          Name="LiusHub"
+          Target="[#LiusHub.exe]"
+          WorkingDirectory="INSTALLFOLDER" />
+        <RemoveFolder Id="RemoveDesktopDir" Directory="DesktopFolder" On="uninstall" />
+        <RegistryValue Root="HKCU" Key="Software\LiusHub" Name="desktop" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+  </Product>
+</Wix>

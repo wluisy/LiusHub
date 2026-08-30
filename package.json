@@ -1,0 +1,83 @@
+{
+  "name": "liushub",
+  "version": "0.1.0",
+  "description": "LiusHub-工作台",
+  "main": "src/main/index.js",
+  "author": "LiusHub Team",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently -k -n VITE,ELECTRON -c blue,green \"npm:dev:renderer\" \"npm:dev:electron\"",
+    "dev:renderer": "vite",
+    "dev:electron": "wait-on tcp:5173 && cross-env NODE_ENV=development electron .",
+    "build:renderer": "vite build",
+    "postinstall": "node scripts/ensure-electron-sqlite.js",
+    "build": "npm run build:renderer && electron-builder",
+    "build:win": "npm run build:renderer && electron-builder --win",
+    "build:msi": "npm run build:renderer && electron-builder --win --dir --config.directories.output=dist-msi && powershell -ExecutionPolicy Bypass -File build/msi-build.ps1 -AppDir dist-msi/win-unpacked",
+    "start": "cross-env NODE_ENV=production electron ."
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.3.0",
+    "dockerode": "^4.0.4",
+    "mysql2": "^3.11.3",
+    "pg": "^8.13.0",
+    "redis": "^4.7.0",
+    "ssh2": "^1.16.0"
+  },
+  "devDependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
+    "@vitejs/plugin-vue": "^5.1.4",
+    "concurrently": "^9.0.1",
+    "cross-env": "^7.0.3",
+    "electron": "^32.3.3",
+    "electron-builder": "^25.1.8",
+    "element-plus": "^2.8.4",
+    "pinia": "^2.2.4",
+    "vite": "^5.4.10",
+    "vue": "^3.5.12",
+    "vue-router": "^4.4.5",
+    "wait-on": "^8.0.1",
+    "xterm": "^5.3.0",
+    "xterm-addon-fit": "^0.8.0",
+    "xterm-addon-web-links": "^0.9.0"
+  },
+  "build": {
+    "appId": "com.liushub.app",
+    "productName": "LiusHub",
+    "npmRebuild": false,
+    "compression": "maximum",
+    "electronLanguages": ["zh-CN", "en-US"],
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/main/**/*",
+      "src/shared/**/*",
+      "dist-renderer/**/*",
+      "build/icon.png",
+      "!**/*.md",
+      "!**/*.map",
+      "!**/*.d.ts",
+      "!**/*.ts",
+      "!node_modules/better-sqlite3/prebuilds/**"
+    ],
+    "win": {
+      "target": [
+        "portable"
+      ],
+      "icon": "build/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "build/icon.icns"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "build/icon.png"
+    }
+  },
+  "allowScripts": {
+    "electron@32.3.3": true
+  }
+}

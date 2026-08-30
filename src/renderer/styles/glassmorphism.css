@@ -1,0 +1,322 @@
+/* ==========================================================================
+   LiusHub 玻璃拟态组件
+   ========================================================================== */
+
+.glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+  backdrop-filter: var(--backdrop-blur);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  transition: background var(--transition), backdrop-filter var(--transition), border-color var(--transition);
+}
+
+.glass-card {
+  composes: glass;
+  padding: 16px;
+  border-radius: var(--radius-lg);
+}
+
+.glass-toolbar {
+  composes: glass;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+}
+
+/* 侧边栏 */
+.lh-sidebar {
+  width: 220px;
+  margin: 10px 0 6px 14px;
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+  backdrop-filter: var(--backdrop-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-float);
+  display: flex;
+  flex-direction: column;
+  transition: width var(--transition);
+}
+.lh-sidebar.collapsed { width: 64px; }
+
+.lh-sidebar-brand {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.4px;
+}
+.lh-sidebar-brand .logo {
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  object-fit: cover;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.lh-nav {
+  flex: 1;
+  padding: 12px 8px;
+  overflow-y: auto;
+}
+.lh-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition);
+  margin-bottom: 2px;
+  user-select: none;
+}
+.lh-nav-item:hover {
+  background: var(--accent-soft);
+  color: var(--text-primary);
+}
+.lh-nav-item.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 500;
+}
+.lh-nav-item .icon { width: 18px; text-align: center; }
+.lh-sidebar.collapsed .lh-nav-item .label,
+.lh-sidebar.collapsed .lh-sidebar-brand .label { display: none; }
+
+/* 顶栏 */
+.lh-topbar {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  height: 48px;
+  margin: 10px 14px 0;
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+  backdrop-filter: var(--backdrop-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-float);
+  gap: 12px;
+}
+
+/* Tab 栏 */
+.lh-tabbar {
+  display: flex;
+  align-items: center;
+  background: var(--glass-bg-soft);
+  -webkit-backdrop-filter: var(--backdrop-blur-soft);
+  backdrop-filter: var(--backdrop-blur-soft);
+  padding: 0 4px;
+  height: 36px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.lh-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px;
+  height: 28px;
+  margin: 0 2px;
+  border-radius: var(--radius-sm);
+  background: rgba(127, 127, 127, 0.10);
+  -webkit-backdrop-filter: var(--backdrop-blur-soft);
+  backdrop-filter: var(--backdrop-blur-soft);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: 12px;
+  white-space: nowrap;
+  user-select: none;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.lh-tab:hover {
+  background: var(--accent-soft);
+  color: var(--text-primary);
+  border-color: var(--accent);
+}
+.lh-tab.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: var(--accent);
+  box-shadow: var(--shadow-float);
+}
+.lh-tab .close {
+  width: 14px; height: 14px;
+  display: grid; place-items: center;
+  border-radius: 4px;
+  font-size: 11px;
+  opacity: 0.5;
+}
+.lh-tab .close:hover { background: var(--danger); color: white; opacity: 1; }
+
+/* 终端 */
+.lh-terminal {
+  background: #000;
+  width: 100%;
+  height: 100%;
+  padding: 8px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.lh-terminal .xterm {
+  width: 100%;
+  height: 100%;
+}
+.lh-terminal .xterm-viewport { background: transparent !important; }
+
+/* 双栏文件管理器 */
+.lh-split {
+  display: grid;
+  grid-template-columns: 1fr 6px 1fr;
+  height: 100%;
+  gap: 0;
+}
+.lh-split .pane {
+  background: var(--glass-bg-soft);
+  -webkit-backdrop-filter: var(--backdrop-blur-soft);
+  backdrop-filter: var(--backdrop-blur-soft);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--glass-border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.lh-split .divider {
+  cursor: col-resize;
+  background: transparent;
+}
+
+.lh-file-table {
+  flex: 1;
+  overflow: auto;
+  font-size: 13px;
+}
+.lh-file-row {
+  display: grid;
+  grid-template-columns: 24px 1fr 100px 160px 100px;
+  align-items: center;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--glass-border);
+  cursor: pointer;
+  user-select: none;
+}
+.lh-file-row:hover { background: var(--accent-soft); }
+.lh-file-row.selected { background: var(--accent-soft); color: var(--accent); }
+.lh-file-row .name { display: flex; align-items: center; gap: 6px; }
+.lh-file-row .size, .lh-file-row .time, .lh-file-row .perm { color: var(--text-muted); font-size: 12px; }
+
+/* 背景层（位于主区域内容之下，z-index:-1） */
+/* 流体渐变颜色：由 [data-fluid] 预设提供变量（html 上全局生效，swatch/预览同构复用） */
+:root {
+  --fl-1: rgba(107, 138, 253, 0.18);
+  --fl-2: rgba(139, 92, 246, 0.16);
+  --fl-3: rgba(14, 165, 233, 0.12);
+}
+[data-fluid="aurora"]   { --fl-1: rgba(107, 138, 253, 0.18); --fl-2: rgba(139, 92, 246, 0.16); --fl-3: rgba(14, 165, 233, 0.12); }
+[data-fluid="sunset"]   { --fl-1: rgba(251, 146, 60, 0.22);  --fl-2: rgba(244, 63, 94, 0.18);  --fl-3: rgba(168, 85, 247, 0.16); }
+[data-fluid="ocean"]    { --fl-1: rgba(14, 165, 233, 0.22);  --fl-2: rgba(37, 99, 235, 0.18);  --fl-3: rgba(45, 212, 191, 0.14); }
+[data-fluid="forest"]   { --fl-1: rgba(16, 185, 129, 0.20);  --fl-2: rgba(132, 204, 22, 0.16); --fl-3: rgba(20, 184, 166, 0.16); }
+[data-fluid="nebula"]   { --fl-1: rgba(232, 121, 249, 0.20); --fl-2: rgba(124, 58, 237, 0.20); --fl-3: rgba(59, 130, 246, 0.14); }
+[data-fluid="graphite"] { --fl-1: rgba(148, 163, 184, 0.18); --fl-2: rgba(100, 116, 139, 0.16); --fl-3: rgba(71, 85, 105, 0.12); }
+
+.lh-app-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse at 20% 20%, var(--fl-1), transparent 55%),
+    radial-gradient(ellipse at 80% 75%, var(--fl-2), transparent 55%),
+    radial-gradient(ellipse at 65% 20%, var(--fl-3), transparent 45%),
+    var(--bg-base);
+  background-size: 200% 200%;
+  background-position: 0% 0%, 100% 100%, 50% 50%;
+  background-repeat: no-repeat;
+  transition: opacity var(--transition);
+}
+
+/* 流体背景：缓慢漂移，营造流动感 */
+.lh-app-bg.fluid {
+  animation: lh-fluid-drift 30s ease-in-out infinite alternate;
+}
+@keyframes lh-fluid-drift {
+  0%   { background-position: 0% 0%, 100% 100%, 50% 50%; }
+  50%  { background-position: 40% 60%, 60% 40%, 20% 80%; }
+  100% { background-position: 100% 0%, 0% 100%, 80% 20%; }
+}
+
+/* 自定义壁纸：模糊度/磨砂度可独立调节 */
+.lh-app-bg.wallpaper {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: blur(var(--bg-blur)) saturate(120%);
+  transform: scale(1.06);
+  animation: none;
+}
+.lh-app-bg.wallpaper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--bg-base);
+  opacity: var(--bg-frost);
+  transition: opacity var(--transition);
+}
+
+/* 玻璃关闭（原生界面）：隐藏背景装饰，展示实色底 */
+:root[data-glass="off"] .lh-app-bg { display: none; }
+
+/* 状态指示 */
+.dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+.dot.success { background: var(--success); }
+.dot.warning { background: var(--warning); }
+.dot.danger  { background: var(--danger); }
+.dot.idle    { background: var(--text-muted); }
+
+/* 资产卡片 */
+.asset-card {
+  composes: glass;
+  padding: 14px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: transform var(--transition);
+}
+.asset-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.asset-card .title { font-weight: 600; font-size: 14px; }
+.asset-card .meta  { color: var(--text-muted); font-size: 12px; margin-top: 4px; }
+
+/* 按钮（自定义） */
+.lh-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all var(--transition);
+}
+.lh-btn:hover { background: var(--accent); color: white; }
+.lh-btn.danger { background: rgba(248, 81, 73, 0.15); color: var(--danger); }
+.lh-btn.danger:hover { background: var(--danger); color: white; }
+.lh-btn.ghost { background: transparent; color: var(--text-secondary); }
+.lh-btn.ghost:hover { background: var(--accent-soft); color: var(--accent); }

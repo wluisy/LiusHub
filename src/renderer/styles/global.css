@@ -1,0 +1,326 @@
+/* ==========================================================================
+   LiusHub 全局样式 - 玻璃拟态 + 深色/亮色主题
+   ========================================================================== */
+
+:root {
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+                  "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", "Cascadia Code", "Fira Code", Consolas,
+               "Source Code Pro", Menlo, monospace;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --transition: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ---- 新拟态浮空投影：底部投影 + 顶部内高光，形成"浮起立体"效果 ---- */
+  --shadow-float:
+    0 12px 32px rgba(0, 0, 0, 0.22),
+    0 3px 10px rgba(0, 0, 0, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+  /* ---- 玻璃拟态运行时变量（由 theme store 在 <html> 上动态写入）---- */
+  --glass-blur: 18px;            /* 玻璃模糊度 */
+  --glass-frost: 0.55;           /* 玻璃不透明度（磨砂度） */
+  --glass-saturation: 180%;      /* 背景饱和度 */
+  --bg-blur: 8px;                /* 壁纸模糊度 */
+  --bg-frost: 0.45;              /* 壁纸遮罩不透明度（磨砂度） */
+
+  /* 派生玻璃样式（主题色通道 + 运行时变量） */
+  --glass-bg:       rgba(var(--glass-bg-rgb), var(--glass-frost));
+  --glass-bg-soft:  rgba(var(--glass-bg-rgb), calc(var(--glass-frost) * 0.8));
+  --backdrop-blur:  saturate(var(--glass-saturation)) blur(var(--glass-blur));
+  --backdrop-blur-soft: saturate(140%) blur(calc(var(--glass-blur) * 0.6));
+
+  /* Element Plus 输入框玻璃化 */
+  --el-input-bg-color: var(--glass-bg-soft);
+
+  /* ---- Element Plus 圆角统一（轻微圆角，"框框"都带一点点圆角）---- */
+  --el-border-radius-base: 6px;
+  --el-border-radius-small: 4px;
+  --el-border-radius-round: 20px;
+  --el-dialog-border-radius: 10px;
+  --el-messagebox-border-radius: 10px;
+}
+
+/* 亮色主题 */
+:root[data-theme="light"] {
+  --bg-base:        #f4f5f8;
+  --bg-elev-1:      #ffffff;
+  --bg-elev-2:      #fafbfd;
+  --glass-bg-rgb:   255, 255, 255;
+  --glass-border:   rgba(0, 0, 0, 0.08);
+  --text-primary:   #1f2329;
+  --text-secondary: #4e5969;
+  --text-muted:     #86909c;
+  --accent:         #4f6df5;
+  --accent-soft:    #e8efff;
+  --success:        #00b42a;
+  --warning:        #ff7d00;
+  --danger:         #f53f3f;
+  --shadow-sm:      0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md:      0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-lg:      0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+/* 深色主题 (默认) */
+:root[data-theme="dark"] {
+  --bg-base:        #0e1116;
+  --bg-elev-1:      #161b22;
+  --bg-elev-2:      #1c222b;
+  --glass-bg-rgb:   22, 27, 34;
+  --glass-border:   rgba(255, 255, 255, 0.08);
+  --text-primary:   #e6edf3;
+  --text-secondary: #b1bac4;
+  --text-muted:     #7d8590;
+  --accent:         #6b8afd;
+  --accent-soft:    rgba(107, 138, 253, 0.18);
+  --success:        #3fb950;
+  --warning:        #d29922;
+  --danger:         #f85149;
+  --shadow-sm:      0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md:      0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-lg:      0 12px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* 玻璃拟态关闭 → 回到原生实色界面 */
+:root[data-glass="off"] {
+  --glass-bg:       var(--bg-elev-1);
+  --glass-bg-soft:  var(--bg-elev-2);
+  --glass-border:   rgba(128, 128, 128, 0.18);
+  --backdrop-blur:  none;
+  --backdrop-blur-soft: none;
+  --glass-saturation: 100%;
+  --el-input-bg-color: var(--bg-elev-2);
+}
+
+* { box-sizing: border-box; }
+
+html, body, #app {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family);
+  font-size: 14px;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  transition: background var(--transition), color var(--transition);
+  overflow: hidden;
+}
+
+button, input, textarea, select {
+  font-family: inherit;
+  color: inherit;
+}
+
+/* 滚动条 */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--glass-border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* 通用工具 */
+.muted { color: var(--text-muted); }
+.secondary { color: var(--text-secondary); }
+.mono { font-family: var(--font-mono); }
+.flex { display: flex; }
+.flex-1 { flex: 1; }
+.row { display: flex; align-items: center; }
+.col { display: flex; flex-direction: column; }
+.gap-8 { gap: 8px; }
+.gap-12 { gap: 12px; }
+.gap-16 { gap: 16px; }
+
+/* Element Plus 主题覆盖 */
+:root[data-theme="dark"] {
+  --el-bg-color: var(--bg-elev-1);
+  --el-bg-color-page: var(--bg-base);
+  --el-bg-color-overlay: var(--bg-elev-2);
+  --el-text-color-primary: var(--text-primary);
+  --el-text-color-regular: var(--text-secondary);
+  --el-border-color: var(--glass-border);
+  --el-color-primary: var(--accent);
+}
+
+:root[data-theme="light"] {
+  --el-bg-color: var(--bg-elev-1);
+  --el-bg-color-page: var(--bg-base);
+  --el-text-color-primary: var(--text-primary);
+  --el-text-color-regular: var(--text-secondary);
+  --el-border-color: #e5e6eb;
+  --el-color-primary: var(--accent);
+}
+
+/* 输入框 / 文本域玻璃化（输入框背景色由 --el-input-bg-color 驱动） */
+.el-input__wrapper,
+.el-textarea__inner {
+  -webkit-backdrop-filter: var(--backdrop-blur-soft);
+  backdrop-filter: var(--backdrop-blur-soft);
+}
+
+/* 标题栏拖动区 (Windows custom titleBar) */
+.titlebar-drag {
+  -webkit-app-region: drag;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  font-size: 12px;
+  color: var(--text-muted);
+  user-select: none;
+}
+.titlebar-no-drag {
+  -webkit-app-region: no-drag;
+}
+
+/* ==========================================================================
+   全局统一轻微圆角：所有"框框"（弹窗/浮层/下拉/页签/表格/输入控件）小圆角
+   ========================================================================== */
+
+/* 弹窗 / 消息 / 浮层类 */
+.el-dialog,
+.el-message-box,
+.el-message,
+.el-notification,
+.el-select-dropdown,
+.el-dropdown-menu,
+.el-popover.el-popper,
+.el-tooltip__popper,
+.el-picker-panel,
+.el-cascader__dropdown {
+  border-radius: var(--radius-md);
+}
+
+/* 页签 / 表格 */
+.el-tabs__header {
+  border-radius: var(--radius-sm);
+}
+.el-table {
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+/* 输入框 / 选择器 / 文本域 / 数字输入 */
+.el-input__wrapper,
+.el-select__wrapper,
+.el-textarea__inner,
+.el-input-number .el-input__wrapper {
+  border-radius: 6px;
+}
+
+/* 下拉选择框：玻璃拟态 + 新拟态浮空立体感（面板浮起投影 + 顶部内高光），选项圆角 */
+.el-select-dropdown {
+  background: var(--glass-bg-soft);
+  -webkit-backdrop-filter: var(--backdrop-blur-soft);
+  backdrop-filter: var(--backdrop-blur-soft);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.25),
+    0 2px 10px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+.el-select-dropdown__item {
+  border-radius: 6px;
+  margin: 0 6px;
+  padding: 0 10px;
+}
+.el-select-dropdown__item.is-selected,
+.el-select-dropdown__item:hover {
+  background: var(--accent-soft);
+}
+
+/* 下拉浮层去重：popper 外层自带实色底/边框/阴影，与内层玻璃下拉叠成"多个框"。
+   把外层 popper 透明化，只保留 .el-select-dropdown 单个玻璃框。 */
+.el-select__popper.el-popper {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+.el-select__popper.el-popper .el-popper__arrow {
+  display: none;
+}
+
+/* ==========================================================================
+   弹窗 / 确认框玻璃化：替代纯白实色底，与整体玻璃拟态一致
+   （el-dialog / el-message-box 渲染在 body 上，需全局样式生效）
+   ========================================================================== */
+.el-overlay {
+  background: rgba(0, 0, 0, 0.35);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+.el-dialog,
+.el-message-box {
+  /* 弹窗需保证文字可读：背景至少 92% 不透明（用户磨砂度再低也不低于此值），
+     否则透过模糊背景的杂物会压过表单文字 */
+  background: rgba(var(--glass-bg-rgb), max(var(--glass-frost), 0.92));
+  -webkit-backdrop-filter: var(--backdrop-blur);
+  backdrop-filter: var(--backdrop-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-float);
+  border-radius: var(--radius-lg);
+}
+.el-dialog__header {
+  padding: 16px 20px 10px;
+  margin-right: 0;
+  border-bottom: 1px solid var(--glass-border);
+}
+.el-dialog__title { font-size: 15px; font-weight: 600; letter-spacing: 0.3px; }
+.el-dialog__body { padding: 18px 20px; }
+.el-dialog__footer {
+  padding: 12px 20px 16px;
+  border-top: 1px solid var(--glass-border);
+}
+.el-message-box__header { padding: 16px 20px 6px; }
+.el-message-box__content { padding: 14px 20px; }
+.el-message-box__btns { padding: 0 20px 16px; }
+
+/* 表单项：更宽松间距 + 清晰标签 */
+.el-form-item { margin-bottom: 18px; }
+.el-form-item__label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  white-space: nowrap; /* 标签禁止换行，避免如「数据库类型」在窄列被拆成两行 */
+}
+.el-form-item__label::before { color: var(--accent); }
+
+/* 数字输入框等弹性控件：在窄列中自适应宽度 */
+.el-input-number { width: 100%; }
+
+/* ==========================================================================
+   通用右键菜单（SessionTabs 连接 tab 右键菜单 + 各视图右键菜单共用）
+   渲染在 body 上（teleport），需全局样式生效
+   ========================================================================== */
+.session-menu {
+  position: fixed;
+  z-index: 3000;
+  min-width: 150px;
+  padding: 4px;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.28);
+}
+.session-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  font-size: 13px;
+  border-radius: var(--radius-sm, 6px);
+  cursor: pointer;
+  color: var(--text-primary);
+  white-space: nowrap;
+  user-select: none;
+}
+.session-menu-item:hover { background: var(--accent-soft); color: var(--accent); }
+.session-menu-item.danger { color: var(--danger); }
+.session-menu-item.danger:hover { background: rgba(248, 81, 73, 0.12); color: var(--danger); }
+.session-menu-sep {
+  height: 1px;
+  margin: 4px 8px;
+  background: var(--glass-border);
+}
